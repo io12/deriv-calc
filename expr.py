@@ -83,10 +83,13 @@ class BinOp(Expr):
         op_s, prec = ops[self.op.__class__]
         f_s = self.f.__str__(prec)
         g_s = self.g.__str__(prec)
-        if prec < parent_prec:
-            return f'({f_s} {op_s} {g_s})'
+        if op_s == '^':
+            s = f'{f_s}^{g_s}'
         else:
-            return f'{f_s} {op_s} {g_s}'
+            s = f'{f_s} {op_s} {g_s}'
+        if prec < parent_prec:
+            s = f'({s})'
+        return s
 
     def deriv(self):
         op = self.op
