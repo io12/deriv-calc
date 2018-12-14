@@ -10,17 +10,17 @@ class DerivCalc(cmd.Cmd):
         cmd.Cmd.__init__(self)
         self.prompt = 'deriv-calc> '
 
-    def do_quit(self, line):
-        return True
-
     def do_exit(self, line):
+        'Exit the calculator.'
         return True
 
     def do_EOF(self, line):
+        'Exit the calculator.'
         print('exit')
         return True
 
     def do_simpl(self, line):
+        'Simplify an expression.'
         print(expr.parse(line).simpl())
 
     def default(self, line):
