@@ -59,7 +59,7 @@ class Expr(ast.Expr):
 
 
 class Undefined(Expr):
-    def __str__(self):
+    def __str__(self, parent_prec=0):
         return 'undefined'
 
     def deriv(self):
@@ -72,16 +72,21 @@ class BinOp(Expr):
         self.g = g
         self.op = op
 
-    def __str__(self):
-        op_tbl = {
-            ast.Add: '+',
-            ast.Sub: '-',
-            ast.Mult: '*',
-            ast.Div: '/',
-            ast.Pow: '^',
+    def __str__(self, parent_prec=0):
+        ops = {
+            ast.Add: ('+', 1),
+            ast.Sub: ('-', 1),
+            ast.Mult: ('*', 2),
+            ast.Div: ('/', 2),
+            ast.Pow: ('^', 3),
         }
-        # TODO: handle precedence properly
-        return f'({self.f} {op_tbl[self.op.__class__]} {self.g})'
+        op_s, prec = ops[self.op.__class__]
+        f_s = self.f.__str__(prec)
+        g_s = self.g.__str__(prec)
+        if parent_prec <= prec:
+            return f'{f_s} {op_s} {g_s}'
+        else:
+            return f'({f_s} {op_s} {g_s})'
 
     def deriv(self):
         op = self.op
@@ -160,13 +165,12 @@ class UnaryOp(Expr):
         self.op = op
         self.operand = operand
 
-    def __str__(self):
-        op_tbl = {
+    def __str__(self, parent_prec=0):
+        ops = {
             ast.UAdd: '+',
             ast.USub: '-',
         }
-        # TODO: handle precedence properly
-        op_s = op_tbl[self.op.__class__]
+        op_s = ops[self.op.__class__]
         if isinstance(self.operand, BinOp):
             return f'{op_s}({self.operand})'
         else:
@@ -201,7 +205,7 @@ class Num(Expr):
     def __init__(self, val):
         self.val = val
 
-    def __str__(self):
+    def __str__(self, parent_prec=0):
         return str(self.val)
 
     def deriv(self):
@@ -212,7 +216,7 @@ class Name(Expr):
     def __init__(self, id):
         self.id = id
 
-    def __str__(self):
+    def __str__(self, parent_prec=0):
         return self.id
 
     def deriv(self):
@@ -227,7 +231,7 @@ class Call(Expr):
         self.id = id
         self.arg = arg
 
-    def __str__(self):
+    def __str__(self, parent_prec=0):
         return f'{self.id}({self.arg})'
 
     def deriv(self):
