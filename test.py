@@ -26,6 +26,15 @@ class Test(unittest.TestCase):
         deriv_eq('5 * x^2 + x^3 - 7 * x^4',
                  '5 * x * 2 + x^2 * 3 - 7 * x^3 * 4')  # TODO
 
+    def test_simpl(self):
+        def simpl_eq(u, du):
+            self.assertEqual(str(expr.parse(u).simpl()), du)
+        simpl_eq('1 + 2 + 3 + 4', '10')
+        simpl_eq('1 - 2 - 3 - 4', '-8')
+        simpl_eq('1 * 2 * 3 * 4', '24')
+        simpl_eq('1 / 2 / 3 / 4', '1/24')
+        simpl_eq('1^2^3^4', '1')
+
 
 if __name__ == '__main__':
     unittest.main()
