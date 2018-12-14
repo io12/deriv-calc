@@ -200,7 +200,6 @@ class UnaryOp(Expr):
             return Undefined()
 
 
-# TODO: make this implicit somehow
 class Num(Expr):
     def __init__(self, val):
         self.val = val
