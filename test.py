@@ -24,7 +24,7 @@ class Test(unittest.TestCase):
         deriv_eq('x^n', 'x^(n - 1) * n')  # TODO
         deriv_eq('1 / x', '-1 / x^2')
         deriv_eq('5 * x^2 + x^3 - 7 * x^4',
-                 '10 * x + 3 * x^2 - 28 * x^3')  # TODO
+                 '5 * x * 2 + x^2 * 3 - 7 * x^3 * 4')  # TODO
 
 
 if __name__ == '__main__':

@@ -316,4 +316,4 @@ class Call(Expr):
 
 
 def parse(s):
-    return trans_ast(ast.parse(s).body[0].value)
+    return trans_ast(ast.parse(s.replace('^', '**')).body[0].value)
